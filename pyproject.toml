@@ -8,6 +8,11 @@ authors = ["Firsov Kirill <kirya.firsov.04@gmail.com>"]
 python = "^3.9"
 Django = "3.2.13"
 django-hosts = "^5.1"
+psycopg2 = "^2.9.3"
+PyGreSQL = "^5.2.4"
+djangorestframework = "^3.13.1"
+Markdown = "^3.3.6"
+django-filter = "^21.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
