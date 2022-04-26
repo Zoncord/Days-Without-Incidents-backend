@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from core.models import Slug, GeneralInformation
+from users.services import get_user_data
 
 
 class User(AbstractUser, Slug):
@@ -17,7 +18,7 @@ class User(AbstractUser, Slug):
                                                   to='achievements.Category')
 
     def __str__(self):
-        pass
+        return get_user_data(self.zoncord_access_token)['first_name']
 
     class Meta:
         verbose_name = 'User'
