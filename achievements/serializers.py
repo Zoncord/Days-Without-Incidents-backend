@@ -37,5 +37,5 @@ class AchievementSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Achievement
-        fields = ['url', 'id', 'owners', 'slug', 'title', 'description', 'tags', 'category', 'days', 'likes',
+        fields = ['url', 'id', 'owners', 'slug', 'title', 'description', 'tags', 'category', 'days',
                   'likes_count']

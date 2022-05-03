@@ -16,6 +16,7 @@ class User(AbstractUser, Slug):
     preferred_categories = models.ManyToManyField(verbose_name='preferred categories',
                                                   help_text='categories that a user might like',
                                                   to='achievements.Category')
+    description = models.CharField(verbose_name='description', max_length=4096, default='')
 
     def __str__(self):
         return get_user_data(self.zoncord_access_token)['first_name']

@@ -6,7 +6,7 @@ from core.models import GeneralInformation, Published
 
 
 class Achievement(GeneralInformation, Published):
-    owners = models.ManyToManyField(verbose_name='achievement creators', to='users.User')
+    owners = models.ManyToManyField(verbose_name='achievement creators', to='users.User', related_name='achievements')
     main_achievement = models.ForeignKey(verbose_name='main achievement', to='achievements.Achievement',
                                          help_text='The achievement from which it was created. If unique, then black',
                                          on_delete=models.SET_NULL, null=True, blank=True)
