@@ -4,9 +4,9 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from achievements.filters import AchievementFilter
-from achievements.models import Achievement, Incident
+from achievements.models import Achievement, Incident, Category, Tag
 from achievements.permissions import IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly
-from achievements.serializers import AchievementSerializer
+from achievements.serializers import AchievementSerializer, CategorySerializer, TagSerializer
 
 
 class AchievementViewSet(viewsets.ModelViewSet):
@@ -20,9 +20,30 @@ class AchievementViewSet(viewsets.ModelViewSet):
     search_fields = ['title']
     filterset_class = AchievementFilter
 
-
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return Achievement.objects.filter(Q(is_private=False) | Q(owners=self.request.user))
 
         return Achievement.objects.filter(is_private=False)
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    permission_classes = []
+
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    ordering_fields = ['id']
+    search_fields = ['title']
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+    permission_classes = []
+
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    ordering_fields = ['id']
+    search_fields = ['title']

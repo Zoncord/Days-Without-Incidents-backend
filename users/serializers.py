@@ -6,16 +6,10 @@ from users.services import get_user_data
 from users.models import User
 
 
-class FollowersCountField(serializers.ReadOnlyField):
-    def to_representation(self, value):
-        return value.followed_users.count()
-
-
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     user_data = get_user_data('123')
     user_first_name = serializers.ReadOnlyField(default=user_data['first_name'])
     user_last_name = serializers.ReadOnlyField(default=user_data['last_name'])
-    followers_count = FollowersCountField(source='*')
 
     class Meta:
         model = User

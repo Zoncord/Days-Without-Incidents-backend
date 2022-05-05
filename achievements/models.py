@@ -1,7 +1,7 @@
 import datetime
-from datetime import timezone
-
 from django.db import models
+from django.utils import timezone
+
 from core.models import GeneralInformation, Published
 
 
@@ -21,13 +21,19 @@ class Achievement(GeneralInformation, Published):
     def __str__(self):
         return str(self.title)
 
+    def days_since_the_last_incident(self):
+        return (datetime.datetime.now() - self.incidents.first().date_time).days
+
+    def likes_count(self):
+        return self.likes.count()
+
     class Meta:
         verbose_name = 'achievement'
         verbose_name_plural = 'achievements'
 
 
 class Incident(models.Model):
-    date_time = models.DateTimeField(verbose_name="Date and time of incident", default=datetime.datetime.now())
+    date_time = models.DateTimeField(verbose_name="Date and time of incident", default=timezone.now)
 
 
 class Category(GeneralInformation):

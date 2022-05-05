@@ -18,6 +18,9 @@ class User(AbstractUser, Slug):
                                                   to='achievements.Category')
     description = models.CharField(verbose_name='description', max_length=4096, default='')
 
+    def followers_count(self):
+        return self.followed_users.count()
+
     def __str__(self):
         return get_user_data(self.zoncord_access_token)['first_name']
 
