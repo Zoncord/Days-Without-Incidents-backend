@@ -4,13 +4,17 @@ from achievements.models import Achievement, Incident, Category, Tag
 
 
 class AchievementSerializer(serializers.HyperlinkedModelSerializer):
+    slug = serializers.CharField(required=False)
+
     def create(self, validated_data):
-        owners = validated_data.pop('owners')
+        request = self.context.get('request', None)
+        tags = validated_data.pop('tags')
 
         # set general information
         achievement = Achievement.objects.create(**validated_data)
         achievement.slug = str(achievement.id)
-        achievement.owners.add(*owners)
+        achievement.owners.add(request.user)
+        achievement.tags.set(tags)
 
         # adding an incident
         incident = Incident.objects.create()
@@ -22,7 +26,7 @@ class AchievementSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Achievement
-        fields = ['url', 'id', 'owners', 'slug', 'title', 'description', 'tags', 'category',
+        fields = ['url', 'id', 'title', 'slug', 'description', 'tags', 'category',
                   'days_since_the_last_incident', 'likes_count']
 
 

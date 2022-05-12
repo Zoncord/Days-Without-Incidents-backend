@@ -7,10 +7,6 @@ from users.services import get_user_data
 class User(AbstractUser, Slug):
     zoncord_access_token = models.CharField(verbose_name='access token', max_length=1024,
                                             help_text='access token to the main application')
-    favorite_achievements = models.ManyToManyField(verbose_name='user favorite achievements',
-                                                   to='achievements.Achievement', related_name='followed_users')
-    favorite_authors = models.ManyToManyField(verbose_name='user favorite pages', to='users.User',
-                                              related_name='followed_users')
     state = models.ForeignKey(verbose_name='user state', to='users.State', related_name='users',
                               on_delete=models.SET_NULL, null=True)
     preferred_categories = models.ManyToManyField(verbose_name='preferred categories',
@@ -19,7 +15,7 @@ class User(AbstractUser, Slug):
     description = models.CharField(verbose_name='description', max_length=4096, default='')
 
     def followers_count(self):
-        return self.followed_users.count()
+        return self.ratings.count()
 
     def __str__(self):
         return get_user_data(self.zoncord_access_token)['first_name']
