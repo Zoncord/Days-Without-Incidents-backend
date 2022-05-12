@@ -13,6 +13,8 @@ PyGreSQL = "^5.2.4"
 djangorestframework = "^3.13.1"
 Markdown = "^3.3.6"
 django-filter = "^21.1"
+django-cors-headers = "^3.11.0"
+requests = "^2.27.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
