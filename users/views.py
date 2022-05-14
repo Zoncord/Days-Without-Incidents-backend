@@ -1,13 +1,11 @@
-import requests
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import User
 from users.permissions import IsCurrentUserOrReadOnly
 from users.serializers import UserSerializer, ProfileSerializer
-from dwi_backend.settings import ZONCORD_CLIENT_ID, ZONCORD_CLIENT_SECRET
 from users.services import update_user_token
 from users.errors import IncorrectCode, CodeNotProvided
 
@@ -23,8 +21,9 @@ class ProfileView(APIView):
     """Returns information about the current user"""
 
     def get(self, request):
-        raise PermissionDenied()
-        user = User.objects.get(id=2)
+        if not request.user.is_authenticated:
+            raise NotAuthenticated()
+        user = User.objects.get(id=request.user.id)
         serializer = ProfileSerializer(user)
         return Response(serializer.data)
 

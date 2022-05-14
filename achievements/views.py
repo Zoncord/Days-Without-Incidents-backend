@@ -4,12 +4,15 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from achievements.filters import AchievementFilter
-from achievements.models import Achievement, Incident, Category, Tag
+from achievements.models import Achievement, Category, Tag
 from achievements.permissions import IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly
 from achievements.serializers import AchievementSerializer, CategorySerializer, TagSerializer
 
 
 class AchievementViewSet(viewsets.ModelViewSet):
+    """
+    Achievements are used to create and obtain information about user cards
+    """
     queryset = Achievement.objects.all()
     serializer_class = AchievementSerializer
 
@@ -21,13 +24,16 @@ class AchievementViewSet(viewsets.ModelViewSet):
     filterset_class = AchievementFilter
 
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Achievement.objects.filter(Q(is_private=False) | Q(owners=self.request.user))
+        if not self.request.user.is_authenticated:
+            return Achievement.objects.filter(is_private=False)
 
-        return Achievement.objects.filter(is_private=False)
+        return Achievement.objects.filter(Q(is_private=False) | Q(owners=self.request.user))
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    Achievement categories
+    """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -39,6 +45,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class TagViewSet(viewsets.ModelViewSet):
+    """
+    Achievement tags
+    """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 

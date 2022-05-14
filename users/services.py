@@ -22,6 +22,12 @@ def get_user_data(access_token: str) -> dict:
 
 
 def get_token_data(code: str) -> dict:
+    """
+    Authorization function in the main application
+
+    :param code: Temporary token returned by the main application
+    :return: Data with access token to the main application
+    """
     url = f'{BASE_SERVER_URL}o/token/'
     data = {
         'client_id': ZONCORD_CLIENT_ID,
@@ -39,7 +45,6 @@ def update_user_token(request) -> str:
         raise CodeNotProvided
 
     code = request.data['code']
-
     token_data = get_token_data(code)
 
     if 'error' in token_data:
