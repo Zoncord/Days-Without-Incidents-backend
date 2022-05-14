@@ -1,5 +1,3 @@
-from rest_framework import viewsets
-
 from blog.filters import PostFilter
 from blog.models import Post
 from blog.serializers import PostSerializer
@@ -18,9 +16,3 @@ class PostViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'date_time_of_creation']
     search_fields = ['title']
     filterset_class = PostFilter
-
-    # def get_queryset(self):
-    #     if self.request.user.is_authenticated:
-    #         return Post.objects.filter(Q(is_private=False) | Q(owners=self.request.user))
-    #
-    #     return Achievement.objects.filter(is_private=False)
