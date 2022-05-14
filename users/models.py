@@ -17,6 +17,9 @@ class User(AbstractUser, Slug):
     def followers_count(self):
         return self.ratings.count()
 
+    def general_user_information(self):
+        return get_user_data(self.zoncord_access_token)
+
     def __str__(self):
         return get_user_data(self.zoncord_access_token)['first_name']
 
