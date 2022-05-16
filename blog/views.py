@@ -1,3 +1,5 @@
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 from blog.filters import PostFilter
 from blog.models import Post
 from blog.serializers import PostSerializer
@@ -10,7 +12,7 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    permission_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = ['id', 'date_time_of_creation']

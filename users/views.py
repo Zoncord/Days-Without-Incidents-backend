@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,7 +24,6 @@ class ProfileView(APIView):
     def get(self, request):
         if not request.user.is_authenticated:
             raise NotAuthenticated()
-        user = User.objects.get(id=request.user.id)
         context = get_profile_context(request)
         return Response(context)
 
@@ -34,7 +32,6 @@ class AuthorizationView(APIView):
     """Accepts an access code and returns an access token"""
 
     def post(self, request):
-        return Response({'token': str(Token.objects.get_or_create(user_id=2)[0])})
         try:
             token = update_user_token(request)
         except IncorrectCode:
