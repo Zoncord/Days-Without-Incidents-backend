@@ -1,12 +1,11 @@
 from rest_framework import viewsets
-from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import User
 from users.permissions import IsCurrentUserOrReadOnly
-from users.serializers import UserSerializer, ProfileSerializer
-from users.services import update_user_token
+from users.serializers import UserSerializer
+from users.services import update_user_token, get_profile_context
 from users.errors import IncorrectCode, CodeNotProvided
 
 
@@ -16,6 +15,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
     permission_classes = [IsCurrentUserOrReadOnly]
 
+    http_method_names = ['get', 'put', 'delete', 'option']
+
 
 class ProfileView(APIView):
     """Returns information about the current user"""
@@ -23,17 +24,14 @@ class ProfileView(APIView):
     def get(self, request):
         if not request.user.is_authenticated:
             raise NotAuthenticated()
-        user = User.objects.get(id=request.user.id)
-        serializer = ProfileSerializer(user)
-        return Response(serializer.data)
+        context = get_profile_context(request)
+        return Response(context)
 
 
 class AuthorizationView(APIView):
-    """"""
+    """Accepts an access code and returns an access token"""
 
     def post(self, request):
-        print(request.data['code'])
-        return Response({'token': str(Token.objects.get_or_create(user_id=2)[0])})
         try:
             token = update_user_token(request)
         except IncorrectCode:

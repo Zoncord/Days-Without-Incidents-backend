@@ -4,3 +4,7 @@ class IncorrectCode(BaseException):
 
 class CodeNotProvided(BaseException):
     pass
+
+
+class CodeOrRefreshTokenNotProvided(BaseException):
+    pass
