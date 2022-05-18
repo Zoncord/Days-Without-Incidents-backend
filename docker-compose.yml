@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  dwi-backend:
+    image: zoncorddocker.azurecr.io/dwi-backend
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn dwi_backend.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/dwi_backend/staticfiles
+      - media_volume:/home/dwi_backend/mediafiles
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    depends_on:
+      - dwi-db
+  dwi-db:
+    image: postgres:14.0-alpine
+    volumes:
+      - postgres_data:/var/lib/dwi-db/data/
+    env_file:
+      - ./.env
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
