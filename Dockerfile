@@ -1,6 +1,6 @@
-FROM python:3.10.4-alpine
+FROM python:3.9-alpine
 MAINTAINER Firsov Kirill <kirill.firsov@zoncord.tech>
-WORKDIR /urs/src/smart_mall
+WORKDIR .
 
 RUN apk update
 RUN apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
@@ -15,4 +15,5 @@ RUN poetry install
 
 COPY . .
 
-CMD gunicorn dwi_backend.wsgi:application --bind 0.0.0.0:8000
+CMD python manage.py migrate
+CMD python manage.py collectstatic

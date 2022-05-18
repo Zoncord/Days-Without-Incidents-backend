@@ -7,6 +7,7 @@ from achievements.filters import AchievementFilter
 from achievements.models import Achievement, Category, Tag
 from achievements.permissions import IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly
 from achievements.serializers import AchievementSerializer, CategorySerializer, TagSerializer
+from core.permissions import IsAdminOrReadOnly
 
 
 class AchievementViewSet(viewsets.ModelViewSet):
@@ -37,7 +38,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    permission_classes = []
+    permission_classes = [IsAdminOrReadOnly]
 
     filter_backends = [DjangoFilterBackend, SearchFilter]
     ordering_fields = ['id']
@@ -51,7 +52,7 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
-    permission_classes = []
+    permission_classes = [IsAdminOrReadOnly]
 
     filter_backends = [DjangoFilterBackend, SearchFilter]
     ordering_fields = ['id']

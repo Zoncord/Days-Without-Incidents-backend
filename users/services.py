@@ -13,7 +13,7 @@ def get_profile_context(request) -> dict:
     :param request:
     :return: user_id, user_url
     """
-    context = {'url': f'http://{BASE_SERVER_URL}/users/user/{request.user.id}/'}
+    context = {'id': request.user.id, 'url': f'http://192.168.43.52:8000/users/user/{request.user.id}/'}
     return context
 
 
@@ -24,21 +24,20 @@ def get_user_data(access_token: str) -> dict:
     :param access_token: Access token to the main application
     :return: first_name; last_name; profile_image
     """
+    # return {'first_name': '123', 'last_name': '123', 'img': '123'}
     # Get user id
-    url = f'{BASE_SERVER_URL}api/auth/user/'
+    url = f'{BASE_SERVER_URL}auth/user/'
     req = requests.get(url=url, headers={'Authorization': f'Bearer {access_token}'}).json()
-    if 'error' in req:
+    if 'detail' in req:
         access_token = get_actual_token(token=access_token)
         req = requests.get(url=url, headers={'Authorization': f'Bearer {access_token}'}).json()
     user_id = req['pk']
 
     # get information about user
-    url = f'{BASE_SERVER_URL}api/user_id/profile/{user_id}/'
+    url = f'{BASE_SERVER_URL}user_id/profile/'
     headers = {'Authorization': f'Bearer {access_token}'}
-    user_data = requests.get(url=url, headers=headers).json()
+    user_data = requests.get(url=url, headers=headers).json()['results'][0]
     user_data['img'] = user_data['profile_photo']
-
-    # return {'first_name': '123', 'last_name': '123', 'img': '123'}
 
     return user_data
 
@@ -66,7 +65,7 @@ def get_actual_token(token: str = None, code: str = None, refresh_token: str = N
     if 'error' in token_data:
         raise IncorrectCode
 
-    url = 'http://192.168.43.52:8001/api/auth/user/'
+    url = f'{BASE_SERVER_URL}auth/user/'
     headers = {'Authorization': f'Bearer {token_data["access_token"]}'}
     user_id = requests.get(url=url, headers=headers).json()['pk']
 
@@ -89,7 +88,7 @@ def get_token_data(code: str = None, refresh_token: str = None) -> dict:
     :return: Data with access token to the main application
     """
     if code is not None:
-        url = f'{BASE_SERVER_URL}o/token/'
+        url = f'https://zoncord.tech/o/token/'
         data = {
             'client_id': ZONCORD_CLIENT_ID,
             'client_secret': ZONCORD_CLIENT_SECRET,
@@ -101,7 +100,7 @@ def get_token_data(code: str = None, refresh_token: str = None) -> dict:
         return requests.post(url=url, data=data).json()
 
     if refresh_token is not None:
-        url = f'{BASE_SERVER_URL}o/token/'
+        url = f'https://zoncord.tech/o/token/'
         data = {
             'client_id': ZONCORD_CLIENT_ID,
             'client_secret': ZONCORD_CLIENT_SECRET,
