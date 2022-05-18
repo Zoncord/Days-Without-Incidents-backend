@@ -14,7 +14,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+from core.views import main_redirect
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="DWI API",
+        default_version='v0.0.1',
+        description="Open source social network where everyone can track people progress",
+        contact=openapi.Contact(email="help@zoncord.tech"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -22,4 +40,6 @@ urlpatterns = [
     path('users/', include('users.urls'), name='users'),
     path('blog/', include('blog.urls'), name='blog'),
     path('rating/', include('rating.urls'), name='rating'),
+    path('', main_redirect, name='main_redirect'),
+    re_path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
