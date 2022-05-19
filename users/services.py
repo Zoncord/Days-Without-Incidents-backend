@@ -89,8 +89,8 @@ def get_token_data(code: str = None, refresh_token: str = None) -> dict:
     if code is not None:
         url = f'https://{settings.BASE_SERVER_HOST}/o/token/'
         data = {
-            'client_id': ZONCORD_CLIENT_ID,
-            'client_secret': ZONCORD_CLIENT_SECRET,
+            'client_id': settings.ZONCORD_CLIENT_ID,
+            'client_secret': settings.ZONCORD_CLIENT_SECRET,
             'code': code,
             'redirect_uri': f'https://{settings.FRONTEND_SITE_HOST}/auth/',
             "grant_type": "authorization_code"
@@ -99,10 +99,10 @@ def get_token_data(code: str = None, refresh_token: str = None) -> dict:
         return requests.post(url=url, data=data).json()
 
     if refresh_token is not None:
-        url = f'{BASE_SERVER_URL}o/token/'
+        url = f'https://{settings.BASE_SERVER_HOST}/o/token/'
         data = {
-            'client_id': ZONCORD_CLIENT_ID,
-            'client_secret': ZONCORD_CLIENT_SECRET,
+            'client_id': settings.ZONCORD_CLIENT_ID,
+            'client_secret': settings.ZONCORD_CLIENT_SECRET,
             'refresh_token': refresh_token,
             'redirect_uri': f'https://{settings.FRONTEND_SITE_HOST}/auth/',
             "grant_type": "refresh_token",
