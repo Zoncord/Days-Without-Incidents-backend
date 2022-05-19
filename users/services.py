@@ -1,8 +1,7 @@
 import requests
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
-
-from dwi_backend.settings import BASE_SERVER_URL, ZONCORD_CLIENT_ID, ZONCORD_CLIENT_SECRET
+from dwi_backend import settings
 from users.errors import IncorrectCode, CodeNotProvided, CodeOrRefreshTokenNotProvided
 
 
@@ -13,7 +12,7 @@ def get_profile_context(request) -> dict:
     :param request:
     :return: user_id, user_url
     """
-    context = {'id': request.user.id, 'url': f'http://192.168.43.52:8000/users/user/{request.user.id}/'}
+    context = {'id': request.user.id, 'url': f'https://{settings.SITE_HOST}users/user/{request.user.id}/'}
     return context
 
 
@@ -26,7 +25,7 @@ def get_user_data(access_token: str) -> dict:
     """
     # return {'first_name': '123', 'last_name': '123', 'img': '123'}
     # Get user id
-    url = f'{BASE_SERVER_URL}auth/user/'
+    url = f'https://{settings.BASE_SERVER_HOST}/auth/user/'
     req = requests.get(url=url, headers={'Authorization': f'Bearer {access_token}'}).json()
     if 'detail' in req:
         access_token = get_actual_token(token=access_token)
@@ -34,7 +33,7 @@ def get_user_data(access_token: str) -> dict:
     user_id = req['pk']
 
     # get information about user
-    url = f'{BASE_SERVER_URL}user_id/profile/'
+    url = f'https://{settings.BASE_API_SERVER_HOST}/user_id/profile/'
     headers = {'Authorization': f'Bearer {access_token}'}
     user_data = requests.get(url=url, headers=headers).json()['results'][0]
     user_data['img'] = user_data['profile_photo']
@@ -65,7 +64,7 @@ def get_actual_token(token: str = None, code: str = None, refresh_token: str = N
     if 'error' in token_data:
         raise IncorrectCode
 
-    url = f'{BASE_SERVER_URL}auth/user/'
+    url = f'https://{settings.BASE_API_SERVER_HOST}/auth/user/'
     headers = {'Authorization': f'Bearer {token_data["access_token"]}'}
     user_id = requests.get(url=url, headers=headers).json()['pk']
 
@@ -88,24 +87,24 @@ def get_token_data(code: str = None, refresh_token: str = None) -> dict:
     :return: Data with access token to the main application
     """
     if code is not None:
-        url = f'https://zoncord.tech/o/token/'
+        url = f'https://{settings.BASE_SERVER_HOST}/o/token/'
         data = {
             'client_id': ZONCORD_CLIENT_ID,
             'client_secret': ZONCORD_CLIENT_SECRET,
             'code': code,
-            'redirect_uri': 'http://192.168.43.76:8080/auth/',
+            'redirect_uri': f'https://{settings.FRONTEND_SITE_HOST}/auth/',
             "grant_type": "authorization_code"
         }
 
         return requests.post(url=url, data=data).json()
 
     if refresh_token is not None:
-        url = f'https://zoncord.tech/o/token/'
+        url = f'{BASE_SERVER_URL}o/token/'
         data = {
             'client_id': ZONCORD_CLIENT_ID,
             'client_secret': ZONCORD_CLIENT_SECRET,
             'refresh_token': refresh_token,
-            'redirect_uri': 'http://192.168.43.76:8080/auth/',
+            'redirect_uri': f'https://{settings.FRONTEND_SITE_HOST}/auth/',
             "grant_type": "refresh_token",
         }
 
