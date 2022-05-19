@@ -19,6 +19,8 @@ services:
       - ./.env
     depends_on:
       - dwi-db
+    networks:
+      - zoncorddeploy_static_media_network
   dwi-db:
     image: postgres:14.0-alpine
     volumes:
@@ -30,3 +32,9 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
+
+networks:
+  frontend:
+  backend:
+  zoncorddeploy_static_media_network:
+    external: true
