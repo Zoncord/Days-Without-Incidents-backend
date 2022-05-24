@@ -1,3 +1,4 @@
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from core.models import Slug, GeneralInformation
@@ -6,9 +7,11 @@ from users.services import get_user_data
 
 class User(AbstractUser, Slug):
     zoncord_access_token = models.CharField(verbose_name='access token', max_length=1024,
-                                            help_text='access token to the main application')
+                                            help_text='access token to the main application', default=None, null=True,
+                                            blank=True)
     zoncord_refresh_token = models.CharField(verbose_name='access token', max_length=1024,
-                                             help_text='refresh token to the main application')
+                                             help_text='refresh token to the main application', default=None, null=True,
+                                             blank=True)
     state = models.ForeignKey(verbose_name='user state', to='users.State', related_name='users',
                               on_delete=models.SET_NULL, null=True, blank=True)
     preferred_categories = models.ManyToManyField(verbose_name='preferred categories',

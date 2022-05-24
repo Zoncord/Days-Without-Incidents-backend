@@ -5,4 +5,4 @@ from users.models import User
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'id', 'general_user_information', 'description', 'followers_count', 'zoncord_access_token']
+        fields = ['url', 'id', 'general_user_information', 'description', 'followers_count']

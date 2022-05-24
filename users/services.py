@@ -25,6 +25,8 @@ def get_user_data(access_token: str) -> dict:
     """
     # return {'first_name': '123', 'last_name': '123', 'img': '123'}
     # Get user id
+    if access_token is None:
+        return {'first_name': 'None', 'last_name': 'None', 'image': 'None'}
     url = f'https://{settings.BASE_API_SERVER_HOST}/auth/user/'
     req = requests.get(url=url, headers={'Authorization': f'Bearer {access_token}'}).json()
     if 'detail' in req:
