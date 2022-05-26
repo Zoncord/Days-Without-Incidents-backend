@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   dwi-backend:
-    image: zoncorddocker.azurecr.io/dwi-backend
+    image: zoncord.azurecr.io/dwi-backend
     restart: always
     build:
       context: .
@@ -13,20 +13,10 @@ services:
       - media_volume:/home/dwi_backend/mediafiles
     expose:
       - 8000
-    ports:
-      - 8000:8000
     env_file:
       - ./.env
-    depends_on:
-      - db
     networks:
       - zoncorddeploy_static_media_network
-  db:
-    image: postgres:14.0-alpine
-    volumes:
-      - postgres_data:/var/lib/dwi-db/data/
-    env_file:
-      - ./.env
 
 volumes:
   postgres_data:
@@ -34,7 +24,5 @@ volumes:
   media_volume:
 
 networks:
-  frontend:
-  backend:
   zoncorddeploy_static_media_network:
     external: true

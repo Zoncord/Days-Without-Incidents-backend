@@ -32,8 +32,14 @@ class AchievementSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    slug = serializers.ReadOnlyField()
+    description = serializers.ReadOnlyField()
+
     def create(self, validated_data):
-        category = Category.objects.get_or_create(title=validated_data.pop('title'))[0]
+        category, created = Category.objects.get_or_create(title=validated_data.pop('title'))
+        if created:
+            category.slug = str(category.id)
+            category.description = ''
         return category
 
     class Meta:
@@ -48,7 +54,8 @@ class TagSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         tag, created = Tag.objects.get_or_create(title=validated_data.pop('title'))
         if created:
-            slug = str(tag.id)
+            tag.slug = str(tag.id)
+            tag.description = ''
         return tag
 
     class Meta:

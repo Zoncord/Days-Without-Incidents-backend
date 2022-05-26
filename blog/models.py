@@ -5,7 +5,10 @@ from core.models import GeneralInformation, Published
 class Post(GeneralInformation, Published):
     author = models.ForeignKey(verbose_name='author', to='users.User', on_delete=models.SET_NULL, null=True)
     achievement = models.ForeignKey(verbose_name='achievement', to='achievements.Achievement',
-                                    on_delete=models.CASCADE, null=True)
+                                    on_delete=models.CASCADE, null=True, related_name='posts')
+
+    def likes_count(self):
+        return self.ratings.count()
 
     def __str__(self):
         return str(self.title)
