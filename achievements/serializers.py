@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from achievements.models import Achievement, Incident, Category, Tag
+from blog.errors import NotTheOwnerOfTheAchievement
 
 
 class AchievementSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,9 +19,8 @@ class AchievementSerializer(serializers.HyperlinkedModelSerializer):
         achievement.tags.set(tags)
 
         # adding an incident
-        incident = Incident.objects.create()
+        incident = Incident.objects.create(achievement=achievement)
         incident.save()
-        achievement.incidents.add(incident)
 
         achievement.save()
         return achievement
@@ -32,12 +32,50 @@ class AchievementSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    slug = serializers.ReadOnlyField()
+    description = serializers.ReadOnlyField()
+
+    def create(self, validated_data):
+        category, created = Category.objects.get_or_create(title=validated_data.pop('title'))
+        if created:
+            category.slug = str(category.id)
+            category.description = ''
+        return category
+
     class Meta:
         model = Category
         fields = '__all__'
 
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
+    slug = serializers.ReadOnlyField()
+    description = serializers.ReadOnlyField()
+
+    def create(self, validated_data):
+        tag, created = Tag.objects.get_or_create(title=validated_data.pop('title'))
+        if created:
+            tag.slug = str(tag.id)
+            tag.description = ''
+        return tag
+
     class Meta:
         model = Tag
+        fields = '__all__'
+
+
+class IncidentSerializer(serializers.HyperlinkedModelSerializer):
+    date_time = serializers.ReadOnlyField()
+
+    def create(self, validated_data):
+        request = self.context.get('request', None)
+        achievement = validated_data.pop('achievement')
+        achievement = Achievement.objects.get(id=achievement.id)
+        if request.user not in achievement.owners.all():
+            raise NotTheOwnerOfTheAchievement()
+
+        incident = Incident.objects.create(achievement=achievement)
+        return incident
+
+    class Meta:
+        model = Incident
         fields = '__all__'

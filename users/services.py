@@ -12,7 +12,7 @@ def get_profile_context(request) -> dict:
     :param request:
     :return: user_id, user_url
     """
-    context = {'id': request.user.id, 'url': f'https://{settings.SITE_HOST}users/user/{request.user.id}/'}
+    context = {'id': request.user.id, 'url': f'https://{settings.SITE_HOST}/users/user/{request.user.id}/'}
     return context
 
 
@@ -25,7 +25,9 @@ def get_user_data(access_token: str) -> dict:
     """
     # return {'first_name': '123', 'last_name': '123', 'img': '123'}
     # Get user id
-    url = f'https://{settings.BASE_SERVER_HOST}/auth/user/'
+    if access_token is None:
+        return {'first_name': 'None', 'last_name': 'None', 'image': 'None'}
+    url = f'https://{settings.BASE_API_SERVER_HOST}/auth/user/'
     req = requests.get(url=url, headers={'Authorization': f'Bearer {access_token}'}).json()
     if 'detail' in req:
         access_token = get_actual_token(token=access_token)

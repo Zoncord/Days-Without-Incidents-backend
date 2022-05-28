@@ -4,9 +4,9 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from achievements.filters import AchievementFilter
-from achievements.models import Achievement, Category, Tag
+from achievements.models import Achievement, Category, Tag, Incident
 from achievements.permissions import IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly
-from achievements.serializers import AchievementSerializer, CategorySerializer, TagSerializer
+from achievements.serializers import AchievementSerializer, CategorySerializer, TagSerializer, IncidentSerializer
 from core.permissions import IsAdminOrReadOnly
 
 
@@ -57,3 +57,10 @@ class TagViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     ordering_fields = ['id']
     search_fields = ['title']
+
+
+class IncidentViewSet(viewsets.ModelViewSet):
+    queryset = Incident.objects.all()
+    serializer_class = IncidentSerializer
+
+    permission_classes = [IsAdminOrReadOnly]
