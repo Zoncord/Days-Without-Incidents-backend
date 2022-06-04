@@ -32,9 +32,6 @@ class BaseInformation(models.Model):
 
 
 class Comment(BaseInformation):
-    likes = models.ManyToManyField(verbose_name='likes', help_text='users who liked', related_name='comment_likes',
-                                   to='users.User')
-
     def __str__(self):
         return self.text
 
@@ -43,11 +40,9 @@ class Comment(BaseInformation):
         verbose_name_plural = 'comments'
 
 
-class Answers(BaseInformation):
+class Answer(BaseInformation):
     comment = models.ForeignKey(verbose_name='comment', to='blog.Comment', related_name='answers',
                                 on_delete=models.CASCADE)
-    likes = models.ManyToManyField(verbose_name='likes', help_text='users who liked', related_name='answer_likes',
-                                   to='users.User')
 
     class Meta:
         verbose_name = 'answer'
