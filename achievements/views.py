@@ -60,6 +60,10 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class IncidentViewSet(viewsets.ModelViewSet):
+    """
+    Allows you to reset the number of days for an achievement.
+    Creating an incident resets the number of days the achievement has.
+    """
     queryset = Incident.objects.all()
     serializer_class = IncidentSerializer
 
