@@ -1,10 +1,9 @@
 from django.db.models import Count
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from blog.filters import PostFilter
-from blog.models import Post
+from blog.filters import PostFilter, CommentFilter, AnswerFilter
+from blog.models import Post, Comment
 from blog.permissions import IsAuthorOrReadOnly
-from blog.serializers import PostSerializer
+from blog.serializers import PostSerializer, CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -20,3 +19,23 @@ class PostViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'date_time_of_creation', 'ratings']
     search_fields = ['title']
     filterset_class = PostFilter
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    permission_classes = [IsAuthorOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+
+    filterset_class = CommentFilter
+
+
+class AnswerViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    permission_classes = [IsAuthorOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+
+    filterset_class = AnswerFilter

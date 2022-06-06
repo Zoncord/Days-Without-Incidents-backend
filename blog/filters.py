@@ -24,3 +24,15 @@ class PostFilter(filters.FilterSet):
     class Meta:
         model = Post
         fields = ['author', 'achievement', 'user_favorite']
+
+
+class CommentFilter(filters.FilterSet):
+    class Meta:
+        model = Post
+        fields = ['author', 'achievement']
+
+
+class AnswerFilter(filters.FilterSet):
+    class Meta:
+        model = Post
+        fields = ['author', 'achievement', 'comment']

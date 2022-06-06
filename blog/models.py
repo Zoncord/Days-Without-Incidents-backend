@@ -15,8 +15,8 @@ class Post(GeneralInformation, Published):
 
 
 class BaseInformation(models.Model):
-    user = models.ForeignKey(verbose_name='user', help_text='the user who left the comment', to='users.User',
-                             on_delete=models.CASCADE)
+    author = models.ForeignKey(verbose_name='user', help_text='the user who left the comment', to='users.User',
+                               on_delete=models.CASCADE)
     post = models.ForeignKey(verbose_name='post', help_text='post commented on', to='blog.Post',
                              on_delete=models.CASCADE)
     text = models.CharField(verbose_name='text', help_text='comment text', max_length=4096)
@@ -24,7 +24,7 @@ class BaseInformation(models.Model):
     date_time_of_last_edit = models.DateTimeField(verbose_name="Date and time of last edit")
 
     def __str__(self):
-        return str(self.user)
+        return str(self.author)
 
     class Meta:
         abstract = True

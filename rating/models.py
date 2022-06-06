@@ -39,7 +39,7 @@ class PostRating(models.Model):
 
 class CommentRating(models.Model):
     user = models.ForeignKey(to=get_user_model(), verbose_name='пользователь', on_delete=models.CASCADE,
-                             related_name='post_rating')
+                             related_name='comment_rating')
     comment = models.ForeignKey(to='blog.Comment', verbose_name='пост',
                                 on_delete=models.CASCADE, related_name='ratings')
 
@@ -56,7 +56,7 @@ class CommentRating(models.Model):
 
 class AnswerRating(models.Model):
     user = models.ForeignKey(to=get_user_model(), verbose_name='пользователь', on_delete=models.CASCADE,
-                             related_name='post_rating')
+                             related_name='answer_rating')
     answer = models.ForeignKey(to='blog.Answer', verbose_name='пост',
                                on_delete=models.CASCADE, related_name='ratings')
 

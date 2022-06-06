@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from achievements.models import Achievement
 from blog.errors import NotTheOwnerOfTheAchievement
-from blog.models import Post
+from blog.models import Post, Comment
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,3 +29,25 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         model = Post
         fields = ['url', 'id', 'author', 'achievement', 'slug', 'title', 'description', 'date_time_of_creation',
                   'likes_count']
+
+
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
+
+    def create(self, validated_data):
+        request = self.context.get('request', None)
+        return Comment.objects.create(user=request.user, **validated_data)
+
+    class Meta:
+        fields = ['__all__']
+
+
+class AnswerSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
+
+    def create(self, validated_data):
+        request = self.context.get('request', None)
+        return Comment.objects.create(user=request.user, **validated_data)
+
+    class Meta:
+        fields = ['__all__']
