@@ -21,9 +21,9 @@ class AchievementRating(models.Model):
 
 
 class PostRating(models.Model):
-    user = models.ForeignKey(to=get_user_model(), verbose_name='пользователь', on_delete=models.CASCADE,
+    user = models.ForeignKey(to=get_user_model(), verbose_name='user', on_delete=models.CASCADE,
                              related_name='post_rating')
-    post = models.ForeignKey(to='blog.Post', verbose_name='пост',
+    post = models.ForeignKey(to='blog.Post', verbose_name='post',
                              on_delete=models.CASCADE, related_name='ratings')
 
     def __str__(self):
@@ -38,9 +38,9 @@ class PostRating(models.Model):
 
 
 class CommentRating(models.Model):
-    user = models.ForeignKey(to=get_user_model(), verbose_name='пользователь', on_delete=models.CASCADE,
+    user = models.ForeignKey(to=get_user_model(), verbose_name='user', on_delete=models.CASCADE,
                              related_name='comment_rating')
-    comment = models.ForeignKey(to='blog.Comment', verbose_name='пост',
+    comment = models.ForeignKey(to='blog.Comment', verbose_name='post',
                                 on_delete=models.CASCADE, related_name='ratings')
 
     def __str__(self):
@@ -55,9 +55,9 @@ class CommentRating(models.Model):
 
 
 class AnswerRating(models.Model):
-    user = models.ForeignKey(to=get_user_model(), verbose_name='пользователь', on_delete=models.CASCADE,
+    user = models.ForeignKey(to=get_user_model(), verbose_name='user', on_delete=models.CASCADE,
                              related_name='answer_rating')
-    answer = models.ForeignKey(to='blog.Answer', verbose_name='пост',
+    answer = models.ForeignKey(to='blog.Answer', verbose_name='post',
                                on_delete=models.CASCADE, related_name='ratings')
 
     def __str__(self):
@@ -72,9 +72,9 @@ class AnswerRating(models.Model):
 
 
 class UserRating(models.Model):
-    user = models.ForeignKey(to=get_user_model(), verbose_name='пользователь', on_delete=models.CASCADE,
+    user = models.ForeignKey(to=get_user_model(), verbose_name='user', on_delete=models.CASCADE,
                              related_name='user_rating')
-    evaluated_user = models.ForeignKey(to=get_user_model(), verbose_name='Оцениваемый пользователь',
+    evaluated_user = models.ForeignKey(to=get_user_model(), verbose_name='estimated user',
                                        on_delete=models.CASCADE,
                                        related_name='ratings')
 

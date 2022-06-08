@@ -13,6 +13,10 @@ class Post(GeneralInformation, Published):
     def __str__(self):
         return str(self.title)
 
+    class Meta:
+        verbose_name = 'post'
+        verbose_name_plural = 'posts'
+
 
 class BaseInformation(models.Model):
     author = models.ForeignKey(verbose_name='user', help_text='the user who left the comment', to='users.User',
@@ -25,6 +29,9 @@ class BaseInformation(models.Model):
 
     def __str__(self):
         return str(self.author)
+
+    def likes_count(self):
+        return self.ratings.count()
 
     class Meta:
         abstract = True

@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 
 from rating.models import AchievementRating
-from .models import Post
+from .models import Post, Answer, Comment
 
 
 class LikeFilter(filters.Filter):
@@ -28,11 +28,11 @@ class PostFilter(filters.FilterSet):
 
 class CommentFilter(filters.FilterSet):
     class Meta:
-        model = Post
+        model = Comment
         fields = ['author', 'achievement']
 
 
 class AnswerFilter(filters.FilterSet):
     class Meta:
-        model = Post
+        model = Answer
         fields = ['author', 'achievement', 'comment']
