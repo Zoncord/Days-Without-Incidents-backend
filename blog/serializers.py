@@ -37,7 +37,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get('request', None)
-        return Comment.objects.create(user=request.user, **validated_data)
+        return Comment.objects.create(author=request.user, **validated_data)
 
     class Meta:
         model = Comment
@@ -50,7 +50,7 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get('request', None)
-        return Comment.objects.create(user=request.user, **validated_data)
+        return Comment.objects.create(author=request.user, **validated_data)
 
     class Meta:
         model = Answer

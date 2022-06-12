@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 from core.models import GeneralInformation, Published
 
 
@@ -24,8 +26,8 @@ class BaseInformation(models.Model):
     post = models.ForeignKey(verbose_name='post', help_text='post commented on', to='blog.Post',
                              on_delete=models.CASCADE)
     text = models.CharField(verbose_name='text', help_text='comment text', max_length=4096)
-    date_time_of_creation = models.DateTimeField(verbose_name="Date and time of creation")
-    date_time_of_last_edit = models.DateTimeField(verbose_name="Date and time of last edit")
+    date_time_of_creation = models.DateTimeField(verbose_name="Date and time of creation", default=timezone.now)
+    date_time_of_last_edit = models.DateTimeField(verbose_name="Date and time of last edit", default=timezone.now)
 
     def __str__(self):
         return str(self.author)

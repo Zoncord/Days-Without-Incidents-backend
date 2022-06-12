@@ -21,6 +21,7 @@ DEBUG = int(os.getenv('DEBUG', default=1))
 
 if not DEBUG:
     ALLOWED_HOSTS = os.getenv('VIRTUAL_HOST').split(',')
+ALLOWED_HOSTS = ['b09a-5-141-29-30.eu.ngrok.io']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
