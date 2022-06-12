@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from achievements.models import Achievement
 from blog.errors import NotTheOwnerOfTheAchievement
-from blog.models import Post, Comment
+from blog.models import Post, Comment, Answer
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -32,22 +32,26 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
+    author = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
+    date_time_of_creation = serializers.ReadOnlyField()
 
     def create(self, validated_data):
         request = self.context.get('request', None)
         return Comment.objects.create(user=request.user, **validated_data)
 
     class Meta:
-        fields = ['__all__']
+        model = Comment
+        fields = ['url', 'id', 'author', 'text', 'post', 'date_time_of_creation']
 
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
+    author = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail', required=False)
+    date_time_of_creation = serializers.ReadOnlyField()
 
     def create(self, validated_data):
         request = self.context.get('request', None)
         return Comment.objects.create(user=request.user, **validated_data)
 
     class Meta:
-        fields = ['__all__']
+        model = Answer
+        fields = ['url', 'id', 'author', 'text', 'comment', 'date_time_of_creation']

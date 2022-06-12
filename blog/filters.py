@@ -29,10 +29,10 @@ class PostFilter(filters.FilterSet):
 class CommentFilter(filters.FilterSet):
     class Meta:
         model = Comment
-        fields = ['author', 'achievement']
+        fields = ['author', 'post']
 
 
 class AnswerFilter(filters.FilterSet):
     class Meta:
         model = Answer
-        fields = ['author', 'achievement', 'comment']
+        fields = ['author', 'post', 'comment']
