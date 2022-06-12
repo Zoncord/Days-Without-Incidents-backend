@@ -15,7 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', default='<django-secret-key>')
 
 DEBUG = int(os.getenv('DEBUG', default=1))
 
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'dwi_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('POSTGRES_ENGINE'),
-        'NAME': os.environ.get('POSTGRES_DB'),
+        'NAME': os.environ.get('POSTGRES_DATABASE'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': os.environ.get('POSTGRES_HOST'),

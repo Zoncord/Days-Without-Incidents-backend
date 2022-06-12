@@ -13,10 +13,14 @@ class Post(GeneralInformation, Published):
     def __str__(self):
         return str(self.title)
 
+    class Meta:
+        verbose_name = 'post'
+        verbose_name_plural = 'posts'
+
 
 class BaseInformation(models.Model):
-    user = models.ForeignKey(verbose_name='user', help_text='the user who left the comment', to='users.User',
-                             on_delete=models.CASCADE)
+    author = models.ForeignKey(verbose_name='user', help_text='the user who left the comment', to='users.User',
+                               on_delete=models.CASCADE)
     post = models.ForeignKey(verbose_name='post', help_text='post commented on', to='blog.Post',
                              on_delete=models.CASCADE)
     text = models.CharField(verbose_name='text', help_text='comment text', max_length=4096)
@@ -24,7 +28,10 @@ class BaseInformation(models.Model):
     date_time_of_last_edit = models.DateTimeField(verbose_name="Date and time of last edit")
 
     def __str__(self):
-        return str(self.user)
+        return str(self.author)
+
+    def likes_count(self):
+        return self.ratings.count()
 
     class Meta:
         abstract = True
@@ -32,9 +39,6 @@ class BaseInformation(models.Model):
 
 
 class Comment(BaseInformation):
-    likes = models.ManyToManyField(verbose_name='likes', help_text='users who liked', related_name='comment_likes',
-                                   to='users.User')
-
     def __str__(self):
         return self.text
 
@@ -43,11 +47,9 @@ class Comment(BaseInformation):
         verbose_name_plural = 'comments'
 
 
-class Answers(BaseInformation):
+class Answer(BaseInformation):
     comment = models.ForeignKey(verbose_name='comment', to='blog.Comment', related_name='answers',
                                 on_delete=models.CASCADE)
-    likes = models.ManyToManyField(verbose_name='likes', help_text='users who liked', related_name='answer_likes',
-                                   to='users.User')
 
     class Meta:
         verbose_name = 'answer'

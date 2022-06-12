@@ -13,8 +13,6 @@ class Achievement(GeneralInformation, Published):
     category = models.ForeignKey(verbose_name='category', to='achievements.Category', related_name='achievements',
                                  on_delete=models.SET_NULL, blank=True, null=True)
     tags = models.ManyToManyField(verbose_name='tags', to="achievements.Tag", related_name='achievements', blank=True)
-    likes = models.ManyToManyField(verbose_name='likes', help_text='users who liked', related_name='achievement_likes',
-                                   to='users.User', blank=True)
     is_private = models.BooleanField('privacy', default=False)
 
     def __str__(self):
@@ -24,7 +22,7 @@ class Achievement(GeneralInformation, Published):
         return (datetime.datetime.now() - self.incidents.last().date_time).days
 
     def likes_count(self):
-        return self.likes.count()
+        return self.ratings.count()
 
     class Meta:
         verbose_name = 'achievement'
