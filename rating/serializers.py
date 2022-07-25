@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import NotAuthenticated
 
 from rating import models
-from rating.models import AchievementRating, UserRating, PostRating, CommentRating, AnswerRating
+from rating.models import AchievementRating, UserRating, PostRating, CommentRating
 
 
 class AchievementRatingSerializer(serializers.HyperlinkedModelSerializer):
@@ -62,19 +62,4 @@ class CommentRatingSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.CommentRating
-        fields = '__all__'
-
-
-class AnswerRatingSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
-
-    def create(self, validated_data):
-        request = self.context.get('request', None)
-        if not request.user.is_authenticated:
-            raise NotAuthenticated
-        rating = AnswerRating.objects.create(user=request.user, **validated_data)
-        return rating
-
-    class Meta:
-        model = models.AnswerRating
         fields = '__all__'
