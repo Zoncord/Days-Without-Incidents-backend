@@ -20,6 +20,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='<django-secret-key>')
 DEBUG = int(os.getenv('DEBUG', default=1))
 
 ALLOWED_HOSTS = os.getenv('VIRTUAL_HOST').split(',')
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [

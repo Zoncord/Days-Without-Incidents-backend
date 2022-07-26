@@ -33,7 +33,10 @@ class Comment(models.Model):
     date_time_of_last_edit = models.DateTimeField(verbose_name="Date and time of last edit", default=timezone.now)
 
     def __str__(self):
-        return self.text
+        return str(self.author)
+
+    def likes_count(self):
+        return self.ratings.count()
 
     class Meta:
         verbose_name = 'comment'
