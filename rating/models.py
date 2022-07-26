@@ -54,23 +54,6 @@ class CommentRating(models.Model):
         verbose_name_plural = 'comments ratings'
 
 
-class AnswerRating(models.Model):
-    user = models.ForeignKey(to=get_user_model(), verbose_name='user', on_delete=models.CASCADE,
-                             related_name='answer_rating')
-    answer = models.ForeignKey(to='blog.Answer', verbose_name='post',
-                               on_delete=models.CASCADE, related_name='ratings')
-
-    def __str__(self):
-        return str(self.user) + ' ' + str(self.answer)
-
-    class Meta:
-        constraints = [
-            UniqueConstraint(fields=['user', 'answer'], name='answer_rating_unique')
-        ]
-        verbose_name = 'answer rating'
-        verbose_name_plural = 'answers ratings'
-
-
 class UserRating(models.Model):
     user = models.ForeignKey(to=get_user_model(), verbose_name='user', on_delete=models.CASCADE,
                              related_name='user_rating')

@@ -1,9 +1,9 @@
 from django.db.models import Count
 
-from blog.filters import PostFilter, CommentFilter, AnswerFilter
-from blog.models import Post, Comment, Answer
+from blog.filters import PostFilter, CommentFilter
+from blog.models import Post, Comment
 from blog.permissions import IsAuthorOrReadOnly
-from blog.serializers import PostSerializer, CommentSerializer, AnswerSerializer
+from blog.serializers import PostSerializer, CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -29,13 +29,3 @@ class CommentViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
 
     filterset_class = CommentFilter
-
-
-class AnswerViewSet(viewsets.ModelViewSet):
-    queryset = Answer.objects.all()
-    serializer_class = AnswerSerializer
-
-    permission_classes = [IsAuthorOrReadOnly]
-    filter_backends = [DjangoFilterBackend]
-
-    filterset_class = AnswerFilter

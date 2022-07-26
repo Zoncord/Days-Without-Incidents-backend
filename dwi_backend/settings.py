@@ -19,9 +19,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='<django-secret-key>')
 
 DEBUG = int(os.getenv('DEBUG', default=1))
 
-if not DEBUG:
-    ALLOWED_HOSTS = os.getenv('VIRTUAL_HOST').split(',')
-ALLOWED_HOSTS = ['b09a-5-141-29-30.eu.ngrok.io']
+ALLOWED_HOSTS = os.getenv('VIRTUAL_HOST').split(',')
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
@@ -121,12 +120,14 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+if not DEBUG:
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = (
+        'rest_framework.authentication.TokenAuthentication',
+    )
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
