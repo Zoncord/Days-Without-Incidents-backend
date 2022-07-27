@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Published(models.Model):
@@ -22,8 +23,8 @@ class Slug(models.Model):
 class GeneralInformation(Slug):
     title = models.CharField(verbose_name='title', max_length=256)
     description = models.CharField(verbose_name="description", max_length=4096)
-    date_time_of_creation = models.DateTimeField(verbose_name="Date and time of creation", auto_now_add=True, null=True)
-    date_time_of_last_edit = models.DateTimeField(verbose_name="Date and time of last edit", auto_now=True, null=True)
+    date_time_of_creation = models.DateTimeField(verbose_name="Date and time of creation", default=timezone.now)
+    date_time_of_last_edit = models.DateTimeField(verbose_name="Date and time of last edit", default=timezone.now)
 
     def __str__(self):
         return self.title
